@@ -1,0 +1,86 @@
+%global source_name libwnck
+
+Summary: Window Navigator Construction Kit
+Name: libwnck3
+Version: @VERSION@
+Release: @REL@%{?dist}
+URL: http://download.gnome.org/sources/%{source_name}/
+Source0: https://download.gnome.org/sources/%{source_name}/43/%{source_name}-%{version}.tar.xz
+License: LGPL-2.0-or-later
+
+# https://gitlab.gnome.org/GNOME/libwnck/-/merge_requests/10
+Patch2:        libwnck_0001-Expose-window-scaling-factor_43.patch
+Patch3:        libwnck_0002-icons-Use-cairo-surfaces-to-render-icons_43.patch
+Patch4:        libwnck_0003-xutils-Change-icons-to-being-cairo-surfaces_43.patch
+Patch5:        libwnck_0004-icons-Mark-GdkPixbuf-icons-as-deprecated_43.patch
+Patch6:        libwnck_0005-tasklist-Add-surface-loader-function_43.patch
+# fix https://gitlab.gnome.org/GNOME/libwnck/-/issues/154#note_1562760
+# https://gitlab.gnome.org/GNOME/libwnck/-/commit/07694559cc0c65ce1cca9ac33b165cef84c34d5e
+Patch7:        libwnck_0001-Revert-xutils-Get-the-correct-PID-for-clients-inside.patch
+# https://bugs.launchpad.net/ubuntu/+source/libwnck3/+bug/1990263
+# https://gitlab.gnome.org/GNOME/libwnck/-/merge_requests/46
+Patch8:        libwnck3_handle_avoid_segfault_in_invalidate_icons.patch
+
+BuildRequires: gcc
+BuildRequires: meson
+BuildRequires: gettext
+BuildRequires: glib2-devel
+BuildRequires: gobject-introspection-devel
+BuildRequires: gtk3-devel
+BuildRequires: gtk-doc
+BuildRequires: libXres-devel
+BuildRequires: pango-devel
+BuildRequires: startup-notification-devel
+
+Requires:      startup-notification
+
+%description
+libwnck (pronounced "libwink") is used to implement pagers, tasklists,
+and other such things. It allows applications to monitor information
+about open windows, workspaces, their names/icons, and so forth.
+
+%package devel
+Summary: Libraries and headers for libwnck
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+
+%prep
+%autosetup -n %{source_name}-%{version} -p1
+
+
+%build
+%meson -Dgtk_doc=true
+%meson_build
+
+
+%install
+%meson_install
+
+%find_lang %{source_name}-3.0 --with-gnome --all-name
+
+
+%ldconfig_scriptlets
+
+
+%files -f %{source_name}-3.0.lang
+%license COPYING
+%doc AUTHORS README NEWS
+%{_libdir}/%{source_name}-3.so.0*
+%{_bindir}/wnck-urgency-monitor
+%{_libdir}/girepository-1.0/Wnck-3.0.typelib
+
+%files devel
+%{_bindir}/wnckprop
+%{_libdir}/%{source_name}-3.so
+%{_libdir}/pkgconfig/*
+%{_includedir}/%{source_name}-3.0/
+%{_datadir}/gir-1.0/Wnck-3.0.gir
+%doc %{_datadir}/gtk-doc
+
+
+%changelog
+@CHANGELOG@

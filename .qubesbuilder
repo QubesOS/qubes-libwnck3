@@ -1,0 +1,12 @@
+host:
+  rpm:
+    build:
+    - libwnck3.spec
+vm:
+  rpm:
+    build:
+    - libwnck3.spec
+source:
+  files:
+  - url: https://download.gnome.org/sources/libwnck/43/libwnck-@VERSION@.tar.xz
+    sha512: libwnck-@VERSION@.tar.xz.sha512
