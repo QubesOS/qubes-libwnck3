@@ -1,0 +1,25 @@
+Author: Simon Gaiser <simon@invisiblethingslab.com>
+
+diff --git a/libwnck/wnck-icon-cache.c b/libwnck/wnck-icon-cache.c
+index d9e67e8..a15112d 100644
+--- a/libwnck/wnck-icon-cache.c
++++ b/libwnck/wnck-icon-cache.c
+@@ -162,9 +162,15 @@ argbdata_to_surface (gulong *argb_data,
+     {
+       for (x = 0; x < w; x++)
+         {
+-          uint32_t *p = &data[y * stride + x];
+-          gulong *d = &argb_data[y * w + x];
+-          *p = *d;
++          uint8_t *p = (uint8_t*)&data[y * stride + x];
++          uint8_t *d = (uint8_t*)&argb_data[y * w + x];
++          uint8_t alpha = d[3];
++          for (int i = 0; i < 3; i += 1)
++            {
++              int tmp = (alpha * d[i]) + 0x80;
++              p[i] = (tmp + (tmp >> 8)) >> 8;
++            }
++          p[3] = alpha;
+         }
+     }
+ 

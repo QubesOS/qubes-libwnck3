@@ -20,6 +20,7 @@ Patch7:        libwnck_0001-Revert-xutils-Get-the-correct-PID-for-clients-inside
 # https://bugs.launchpad.net/ubuntu/+source/libwnck3/+bug/1990263
 # https://gitlab.gnome.org/GNOME/libwnck/-/merge_requests/46
 Patch8:        libwnck3_handle_avoid_segfault_in_invalidate_icons.patch
+Patch9:        libwnck-cairo-argb.patch
 
 BuildRequires: gcc
 BuildRequires: meson
